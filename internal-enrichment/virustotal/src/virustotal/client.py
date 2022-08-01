@@ -2,23 +2,42 @@
 """Virustotal client module."""
 import base64
 import json
+<<<<<<< HEAD
 import logging
 
+=======
+
+from pycti import OpenCTIConnectorHelper
+>>>>>>> master/master
 import requests
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
 
+<<<<<<< HEAD
 logger = logging.getLogger(__name__)
 
+=======
+>>>>>>> master/master
 
 class VirusTotalClient:
     """VirusTotal client."""
 
+<<<<<<< HEAD
     def __init__(self, base_url, token):
         """Initialize Virustotal client."""
         # Drop the ending slash if present.
         self.url = base_url[:-1] if base_url[-1] == "/" else base_url
         logger.info(f"[VirusTotal] URL: {self.url}")
+=======
+    def __init__(
+        self, helper: OpenCTIConnectorHelper, base_url: str, token: str
+    ) -> None:
+        """Initialize Virustotal client."""
+        self.helper = helper
+        # Drop the ending slash if present.
+        self.url = base_url[:-1] if base_url[-1] == "/" else base_url
+        self.helper.log_info(f"[VirusTotal] URL: {self.url}")
+>>>>>>> master/master
         self.headers = {
             "x-apikey": token,
             "accept": "application/json",
@@ -58,6 +77,7 @@ class VirusTotalClient:
             response = http.get(url, headers=self.headers)
             response.raise_for_status()
         except requests.exceptions.HTTPError as errh:
+<<<<<<< HEAD
             logger.error(f"[VirusTotal] Http error: {errh}")
         except requests.exceptions.ConnectionError as errc:
             logger.error(f"[VirusTotal] Error connecting: {errc}")
@@ -71,17 +91,41 @@ class VirusTotalClient:
             return response.json()
         except json.JSONDecodeError as err:
             logger.error(
+=======
+            self.helper.log_error(f"[VirusTotal] Http error: {errh}")
+        except requests.exceptions.ConnectionError as errc:
+            self.helper.log_error(f"[VirusTotal] Error connecting: {errc}")
+        except requests.exceptions.Timeout as errt:
+            self.helper.log_error(f"[VirusTotal] Timeout error: {errt}")
+        except requests.exceptions.RequestException as err:
+            self.helper.log_error(f"[VirusTotal] Something else happened: {err}")
+        except Exception as err:
+            self.helper.log_error(f"[VirusTotal] Unknown error {err}")
+        try:
+            self.helper.log_debug(f"[VirusTotal] data retrieved: {response.json()}")
+            return response.json()
+        except json.JSONDecodeError as err:
+            self.helper.log_error(
+>>>>>>> master/master
                 f"[VirusTotal] Error decoding the json: {err} - {response.text}"
             )
             return None
 
+<<<<<<< HEAD
     def get_file_info(self, hash):
+=======
+    def get_file_info(self, hash256):
+>>>>>>> master/master
         """
         Retrieve file information based on the given hash-256.
 
         Parameters
         ----------
+<<<<<<< HEAD
         hash : str
+=======
+        hash256 : str
+>>>>>>> master/master
             Hash of the file to retrieve.
 
         Returns
@@ -89,10 +133,17 @@ class VirusTotalClient:
         dict
             File object, see https://developers.virustotal.com/reference/files.
         """
+<<<<<<< HEAD
         url = f"{self.url}/files/{hash}"
         return self._query(url)
 
     def get_yara_ruleset(self, ruleset_id):
+=======
+        url = f"{self.url}/files/{hash256}"
+        return self._query(url)
+
+    def get_yara_ruleset(self, ruleset_id) -> dict:
+>>>>>>> master/master
         """
         Retrieve the YARA rules based on the given ruleset id.
 
@@ -132,8 +183,13 @@ class VirusTotalClient:
 
         Parameters
         ----------
+<<<<<<< HEAD
         ip : str
             IP address.
+=======
+        domain : str
+            Domain name.
+>>>>>>> master/master
 
         Returns
         -------
@@ -149,18 +205,31 @@ class VirusTotalClient:
 
         Parameters
         ----------
+<<<<<<< HEAD
         ip : str
             IP address.
+=======
+        url : str
+            Url.
+>>>>>>> master/master
 
         Returns
         -------
         dict
             URL Object, see https://developers.virustotal.com/reference/url-object
         """
+<<<<<<< HEAD
         url = f"{self.url}/urls/{self.base64_encode_no_padding(url)}"
         return self._query(url)
 
     def base64_encode_no_padding(self, contents):
+=======
+        url = f"{self.url}/urls/{VirusTotalClient.base64_encode_no_padding(url)}"
+        return self._query(url)
+
+    @staticmethod
+    def base64_encode_no_padding(contents):
+>>>>>>> master/master
         """
         Base64 encode a string and remove padding.
 

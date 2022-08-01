@@ -95,7 +95,10 @@ class SplunkConnector:
             + "/storage/collections"
             + uri
         )
+<<<<<<< HEAD
 
+=======
+>>>>>>> master/master
         if method == "get":
             r = requests.get(
                 url,

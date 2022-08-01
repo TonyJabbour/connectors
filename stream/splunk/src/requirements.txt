@@ -1,1 +1,5 @@
+<<<<<<< HEAD
 git+https://github.com/APS3C/client-python@master#egg=pycti
+=======
+pycti==5.3.7
+>>>>>>> master/master
